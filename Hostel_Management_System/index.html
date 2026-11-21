@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8fc">
+  <title>HostelHub | Hostel Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="HostelHub home">
+        <span class="brand-mark">H</span><span class="brand-copy"><strong>HostelHub</strong><small>HOSTEL MANAGEMENT</small></span>
+      </a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span>Dashboard</button>
+        <button class="nav-item" data-view="students"><span class="nav-icon">♙</span>Students <span class="nav-count" id="studentNavCount">0</span></button>
+        <button class="nav-item" data-view="rooms"><span class="nav-icon">▤</span>Rooms</button>
+        <button class="nav-item" data-view="fees"><span class="nav-icon">₹</span>Fee records</button>
+        <button class="nav-item" data-view="complaints"><span class="nav-icon">⚑</span>Complaints <span class="nav-count" id="complaintNavCount">0</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><span class="help-icon">i</span><strong>Local project</strong><p>Your data is saved in this browser using localStorage.</p></div>
+        <div class="profile"><div class="avatar">HA</div><div><strong>Hostel Admin</strong><small>Administrator</small></div><span class="profile-menu">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuToggle" aria-label="Open navigation">☰</button>
+        <div class="breadcrumb"><span>Hostel Administration</span><span class="crumb-slash">/</span><strong id="pageCrumb">Dashboard</strong></div>
+        <div class="topbar-actions"><span class="today-label" id="todayLabel"></span><button class="icon-button" title="Notifications" aria-label="Notifications">♧<i class="notification-dot"></i></button><div class="avatar top-avatar">HA</div></div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="page-heading"><div><p class="eyebrow">OVERVIEW</p><h1>Dashboard</h1><p class="page-subtitle">Here’s what’s happening at your hostel today.</p></div><button class="button button-primary" data-action="add-student"><span>＋</span> Add student</button></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Total students</span><span class="stat-icon icon-violet">♙</span></div><strong class="stat-value" id="totalStudents">0</strong><div class="stat-foot"><span class="status-dot violet-dot"></span> Active residents</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Total rooms</span><span class="stat-icon icon-blue">▤</span></div><strong class="stat-value" id="totalRooms">0</strong><div class="stat-foot"><span class="status-dot blue-dot"></span><span id="roomCapacityText">0 beds in total</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Occupied beds</span><span class="stat-icon icon-green">✓</span></div><strong class="stat-value" id="occupiedBeds">0</strong><div class="stat-foot"><span class="status-dot green-dot"></span><span id="occupancyText">0% occupancy</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Available beds</span><span class="stat-icon icon-orange">⌂</span></div><strong class="stat-value" id="availableBeds">0</strong><div class="stat-foot"><span class="status-dot orange-dot"></span> Ready for allocation</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Open complaints</span><span class="stat-icon icon-red">⚑</span></div><strong class="stat-value" id="openComplaints">0</strong><div class="stat-foot"><span class="status-dot" style="background:#df5b69"></span> Open or in progress</div></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel occupancy-panel"><div class="panel-heading"><div><h2>Room occupancy</h2><p>Current bed availability by room</p></div><button class="text-button" data-go="rooms">View rooms <span>→</span></button></div><div id="occupancyList" class="occupancy-list"></div></article>
+          <article class="panel pending-panel"><div class="panel-heading"><div><h2>Pending fees</h2><p>Outstanding student balances</p></div><span class="mini-icon">₹</span></div><div class="pending-total" id="pendingTotal">₹0</div><div class="pending-caption"><span class="status-dot orange-dot"></span><span id="pendingCount">0 students with a balance</span></div><div class="pending-divider"></div><button class="button button-light full-width" data-go="fees">Review fee records <span>→</span></button></article>
+          <article class="panel recent-panel"><div class="panel-heading"><div><h2>Recent admissions</h2><p>Latest students added</p></div><button class="text-button" data-go="students">View all <span>→</span></button></div><div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>COURSE</th><th>ROOM</th><th>ADMITTED</th></tr></thead><tbody id="recentStudents"></tbody></table></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="view-students">
+        <div class="page-heading"><div><p class="eyebrow">RESIDENT DIRECTORY</p><h1>Students</h1><p class="page-subtitle">Manage student details and room allocations.</p></div><button class="button button-primary" data-action="add-student"><span>＋</span> Add student</button></div>
+        <div class="panel list-panel"><div class="list-toolbar"><div class="search-box"><span>⌕</span><input id="studentSearch" type="search" placeholder="Search name, ID, course or phone" aria-label="Search students"></div><select class="select-control" id="studentRoomFilter" aria-label="Filter by room"><option value="">All rooms</option></select><select class="select-control" id="studentCourseFilter" aria-label="Filter by course"><option value="">All courses</option></select><span class="result-count" id="studentResultCount"></span></div><div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>STUDENT ID</th><th>COURSE</th><th>PHONE</th><th>ROOM</th><th>ADMISSION DATE</th><th class="action-heading">ACTIONS</th></tr></thead><tbody id="studentsTable"></tbody></table></div><div class="empty-state hidden" id="studentsEmpty"><div class="empty-illustration">♙</div><strong>No students found</strong><p>Try changing your search or add a student record.</p><button class="button button-primary" data-action="add-student">Add student</button></div></div>
+      </section>
+
+      <section class="view" id="view-rooms">
+        <div class="page-heading"><div><p class="eyebrow">ACCOMMODATION</p><h1>Rooms</h1><p class="page-subtitle">View capacity, occupancy, and room availability.</p></div><button class="button button-primary" data-action="add-room"><span>＋</span> Add room</button></div>
+        <div class="room-summary" id="roomSummary"></div>
+        <div class="room-grid" id="roomGrid"></div>
+        <div class="empty-state panel hidden" id="roomsEmpty"><div class="empty-illustration">▤</div><strong>No rooms added yet</strong><p>Add rooms before allocating students.</p><button class="button button-primary" data-action="add-room">Add room</button></div>
+      </section>
+
+      <section class="view" id="view-fees">
+        <div class="page-heading"><div><p class="eyebrow">PAYMENTS</p><h1>Fee records</h1><p class="page-subtitle">Track monthly hostel fees and record student payments.</p></div></div>
+        <div class="fee-stats"><article class="fee-stat"><span>Pending balance</span><strong id="feePendingTotal">₹0</strong><small>Across all students</small></article><article class="fee-stat"><span>Payments recorded</span><strong id="paymentCount">0</strong><small>Payment transactions</small></article><article class="fee-stat"><span>Collected this month</span><strong id="collectedThisMonth">₹0</strong><small>Based on payment date</small></article></div>
+        <div class="panel list-panel"><div class="list-toolbar"><div class="search-box"><span>⌕</span><input id="feeSearch" type="search" placeholder="Search student or ID" aria-label="Search fee records"></div><select class="select-control" id="feeStatusFilter" aria-label="Filter fee status"><option value="">All balances</option><option value="pending">Pending balance</option><option value="clear">No pending balance</option></select></div><div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>ROOM</th><th>MONTHLY FEE</th><th>PAID THIS MONTH</th><th>BALANCE</th><th>STATUS</th><th class="action-heading">ACTION</th></tr></thead><tbody id="feesTable"></tbody></table></div><div class="empty-state hidden" id="feesEmpty"><div class="empty-illustration">₹</div><strong>No fee records found</strong><p>Fee records appear when students are added.</p></div></div>
+        <article class="panel payments-panel"><div class="panel-heading"><div><h2>Recent payments</h2><p>Latest fee transactions</p></div></div><div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>DATE</th><th>METHOD</th><th>AMOUNT</th></tr></thead><tbody id="paymentsTable"></tbody></table></div><div class="empty-inline hidden" id="paymentsEmpty">No payments recorded yet.</div></article>
+      </section>
+
+      <section class="view" id="view-complaints">
+        <div class="page-heading"><div><p class="eyebrow">RESIDENT SUPPORT</p><h1>Complaints</h1><p class="page-subtitle">Log hostel issues and follow their progress.</p></div><button class="button button-primary" data-action="add-complaint"><span>＋</span> Log complaint</button></div>
+        <div class="complaint-summary"><article class="complaint-stat"><span>Open</span><strong id="openComplaintCount">0</strong><small>Waiting for review</small></article><article class="complaint-stat"><span>In progress</span><strong id="progressComplaintCount">0</strong><small>Being handled</small></article><article class="complaint-stat"><span>Resolved</span><strong id="resolvedComplaintCount">0</strong><small>Completed issues</small></article></div>
+        <div class="panel list-panel"><div class="list-toolbar"><div class="search-box"><span>⌕</span><input id="complaintSearch" type="search" placeholder="Search student, category or issue" aria-label="Search complaints"></div><select class="select-control" id="complaintStatusFilter" aria-label="Filter complaint status"><option value="">All statuses</option><option value="Open">Open</option><option value="In progress">In progress</option><option value="Resolved">Resolved</option></select><select class="select-control" id="complaintCategoryFilter" aria-label="Filter complaint category"><option value="">All categories</option><option>Maintenance</option><option>Cleanliness</option><option>Wi-Fi</option><option>Facilities</option><option>Safety</option><option>Other</option></select><span class="result-count" id="complaintResultCount"></span></div><div class="table-wrap"><table><thead><tr><th>STUDENT</th><th>CATEGORY</th><th>ISSUE</th><th>SUBMITTED</th><th>PRIORITY</th><th>STATUS</th><th class="action-heading">ACTIONS</th></tr></thead><tbody id="complaintsTable"></tbody></table></div><div class="empty-state hidden" id="complaintsEmpty"><div class="empty-illustration">⚑</div><strong>No complaints found</strong><p>Try changing your filters or log a complaint.</p><button class="button button-primary" data-action="add-complaint">Log complaint</button></div></div>
+      </section>
+      <footer class="app-footer"><span>HostelHub · Hostel Management System</span><span>College mini project</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop" role="presentation"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-header"><div><p class="eyebrow" id="modalEyebrow">RECORD DETAILS</p><h2 id="modalTitle">Add student</h2></div><button class="close-button" id="modalClose" aria-label="Close dialog">×</button></div><form id="modalForm"><div class="modal-body" id="modalBody"></div><div class="modal-footer"><button type="button" class="button button-light" id="modalCancel">Cancel</button><button type="submit" class="button button-primary" id="modalSubmit">Save record</button></div></form></section></div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="script.js"></script>
+</body>
+</html>
